@@ -1,0 +1,29 @@
+{
+    "name": "request-info",
+    "version": "1.0.0",
+    "description": "> a GitHub App built with [probot](https://github.com/probot/probot) that requests more info from newly opened PRs/Issues that contain either a default title or whose description is left blank. It does so by taking data from a file in your repository. It should be located in a `.github/request-info.md`",
+    "main": "index.js",
+    "scripts": {
+        "start": "probot run ./index.js",
+        "test": "xo && test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/behaviorbot/request-info.git"
+    },
+    "author": "hiimbex",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/behaviorbot/request-info/issues"
+    },
+    "homepage": "https://github.com/behaviorbot/request-info#readme",
+    "devDependencies": {
+        "xo": "^0.18.2"
+    },
+    "xo": {
+        "space": 4
+    },
+    "dependencies": {
+        "queer": "^2.1.0"
+    }
+}
