@@ -3,7 +3,6 @@
     "payload": {
       "action": "opened",
       "issue": {
-        "number": 9,
         "body": "Fix your broken thigns!",
         "title": "ur thing is broken fix it!!",
         "user": {
@@ -12,9 +11,7 @@
         "labels": []
       },
       "repository": {
-        "id": 95162387,
         "name": "testing-things",
-        "full_name": "hiimbex/testing-things",
         "owner": {
           "login": "hiimbex"
         }
