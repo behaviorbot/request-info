@@ -39,3 +39,5 @@ npm install
 # Run the bot
 npm start
 ```
+
+See [the probot deployment docs](https://github.com/probot/probot/blob/master/docs/deployment.md) if you would like to run your own instance of this plugin.
