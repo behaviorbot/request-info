@@ -15,18 +15,15 @@ module.exports = robot => {
             const options = context.repo({path: '.github/config.yml'});
             const response = await context.github.repos.getContent(options);
             bodies = yaml.load(Buffer.from(response.data.content, 'base64').toString()) || {};
-            robot.log(bodies);
         } catch (err) {
             if (err.code !== 404) throw err;
         }
 
         if (bodies) {
-            if (bodies.requestInfodefaultTitles.includes(title)) badTitle = true;
+            if (bodies.requestInfoDefaultTitles.includes(title.toLowerCase())) badTitle = true;
         }
-        robot.log(badTitle, bodies.requestInfoReplyComment);
         if (!body || badTitle) {
             context.github.issues.createComment(context.issue({body: bodies.requestInfoReplyComment}));
-
             if (bodies.requestInfoLabelToAdd) {
                 // Add label if there is one listed in the yaml file
                 const repo = context.payload.repository;

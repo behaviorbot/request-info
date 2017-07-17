@@ -11,14 +11,23 @@
   - [x] check the box for **Pull Request** events
 - Issues: **Read & Write**
   - [x] check the box for **Issue** events
-2. Add a `.github/request-info.md` file that contains the contents you would like to reply with.
-3. Optionally, you can also add a `.github/request-info.yml` file if you would like the bot to add a label.
+2. Add a `.github/config.yml` file that contains the following:
 
 ```yml
 # Configuration for request-info - https://github.com/behaviorbot/request-info
 
-# Label to be added to Issues and Pull Requests with insufficient information given
-labelToAdd: needs-more-info
+# *Required* default titles to check against for lack of descriptiveness
+# MUST BE ALL LOWERCASE
+requestInfoDefaultTitles:
+  - update readme.md
+  - updates
+
+# *Required* Comment to reply with
+requestInfoReplyComment: >
+  We would appreciate it if you could provide us with more info about this issue/pr!
+
+# *OPTIONAL* Label to be added to Issues and Pull Requests with insufficient information given
+requestInfolabelToAdd: needs-more-info
 ```
 
 ## Setup
@@ -30,5 +39,3 @@ npm install
 # Run the bot
 npm start
 ```
-
-See [docs/deploy.md](docs/deploy.md) if you would like to run your own instance of this plugin.

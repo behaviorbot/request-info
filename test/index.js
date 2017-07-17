@@ -17,7 +17,7 @@ describe('new-pr-welcome', () => {
             repos: {
                 getContent: expect.createSpy().andReturn(Promise.resolve({
                     data: {
-                        content: Buffer.from(`labelToAdd: needs-more-info`).toString('base64')
+                        content: Buffer.from(`requestInfoLabelToAdd: needs-more-info\nrequestInfoDefaultTitles:\n  - readme.md\nrequestInfoReplyComment: >\n  Reply comment`).toString('base64')
                     }
                 }))
             },
@@ -36,13 +36,7 @@ describe('new-pr-welcome', () => {
             expect(github.repos.getContent).toHaveBeenCalledWith({
                 owner: 'hiimbex',
                 repo: 'testing-things',
-                path: '.github/request-info.yml'
-            });
-
-            expect(github.repos.getContent).toHaveBeenCalledWith({
-                owner: 'hiimbex',
-                repo: 'testing-things',
-                path: '.github/request-info.md'
+                path: '.github/config.yml'
             });
 
             expect(github.issues.createComment).toHaveBeenCalled();
@@ -51,21 +45,13 @@ describe('new-pr-welcome', () => {
     });
 
     describe('new-pr-welcome fail', () => {
-        beforeEach(() => {
-            github.repos.getContent = expect.createSpy().andReturn(Promise.resolve({
-                data: {
-                    content: Buffer.from(` `).toString('base64')
-                }
-            }));
-        });
-
         it('does not post a comment because it is not the user\'s first PR', async () => {
             await robot.receive(failEvent);
 
             expect(github.repos.getContent).toHaveBeenCalledWith({
                 owner: 'hiimbex',
                 repo: 'testing-things',
-                path: '.github/request-info.yml'
+                path: '.github/config.yml'
             });
 
             expect(github.issues.createComment).toNotHaveBeenCalled();
