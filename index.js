@@ -12,37 +12,29 @@ module.exports = robot => {
         }
 
         try {
-            const options = context.repo({path: '.github/request-info.yml'});
+            const options = context.repo({path: '.github/config.yml'});
             const response = await context.github.repos.getContent(options);
             bodies = yaml.load(Buffer.from(response.data.content, 'base64').toString()) || {};
+            robot.log(bodies);
         } catch (err) {
             if (err.code !== 404) throw err;
         }
 
-        if (bodies.defaultTitles) {
-            if (bodies.defaultTitles.includes(title)) badTitle = true;
+        if (bodies) {
+            if (bodies.requestInfodefaultTitles.includes(title)) badTitle = true;
         }
-
+        robot.log(badTitle, bodies.requestInfoReplyComment);
         if (!body || badTitle) {
-            let template;
-            try {
-                const options = context.repo({path: '.github/request-info.md'});
-                const response = await context.github.repos.getContent(options);
-                const template = Buffer.from(response.data.content, 'base64').toString();
-            } catch (err) {
-                if (err.code === 404) template = 'The owners of this repository would appreciate if you could provide more information.';
-                else throw err;
-            }
-            context.github.issues.createComment(context.issue({body: template}));
+            context.github.issues.createComment(context.issue({body: bodies.requestInfoReplyComment}));
 
-            if (bodies.labelToAdd) {
+            if (bodies.requestInfoLabelToAdd) {
                 // Add label if there is one listed in the yaml file
                 const repo = context.payload.repository;
                 context.github.issues.addLabels({
                     owner: repo.owner.login,
                     repo: repo.name,
                     number,
-                    labels: [bodies.labelToAdd]
+                    labels: [bodies.requestInfoLabelToAdd]
                 });
             }
         }
