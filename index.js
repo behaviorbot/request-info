@@ -14,7 +14,7 @@ module.exports = robot => {
         try {
             const options = context.repo({path: '.github/config.yml'});
             const response = await context.github.repos.getContent(options);
-            config = yaml.load(Buffer.from(response.data.content, 'base64').toString()) || {};
+            config = yaml.safeLoad(Buffer.from(response.data.content, 'base64').toString()) || {};
         } catch (err) {
             if (err.code !== 404) throw err;
         }
