@@ -4,11 +4,14 @@ module.exports = robot => {
     robot.on('pull_request.opened', receive);
     robot.on('issues.opened', receive);
     async function receive(context) {
-        let title, body, config, badTitle;
+        let title;
+        let body;
+        let config;
+        let badTitle;
         if (context.payload.pull_request) {
-            ({ title, body } = context.payload.pull_request);
+            ({title, body} = context.payload.pull_request);
         } else {
-            ({ title, body } = context.payload.issue);
+            ({title, body} = context.payload.issue);
         }
 
         try {
@@ -16,11 +19,15 @@ module.exports = robot => {
             const response = await context.github.repos.getContent(options);
             config = yaml.safeLoad(Buffer.from(response.data.content, 'base64').toString()) || {};
         } catch (err) {
-            if (err.code !== 404) throw err;
+            if (err.code !== 404) {
+                throw err;
+            }
         }
 
         if (config) {
-            if (config.requestInfoDefaultTitles.includes(title.toLowerCase())) badTitle = true;
+            if (config.requestInfoDefaultTitles.includes(title.toLowerCase())) {
+                badTitle = true;
+            }
         }
         if (!body || badTitle) {
             context.github.issues.createComment(context.issue({body: config.requestInfoReplyComment}));
