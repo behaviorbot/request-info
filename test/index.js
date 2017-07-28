@@ -1,5 +1,4 @@
 const expect = require('expect');
-const yaml = require('js-yaml');
 const {createRobot} = require('probot');
 const plugin = require('..');
 const successEvent = require('./events/successEvent');
