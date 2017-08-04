@@ -27,7 +27,7 @@ requestInfoReplyComment: >
   We would appreciate it if you could provide us with more info about this issue/pr!
 
 # *OPTIONAL* Label to be added to Issues and Pull Requests with insufficient information given
-requestInfolabelToAdd: needs-more-info
+requestInfoLabelToAdd: needs-more-info
 ```
 
 ## Setup
