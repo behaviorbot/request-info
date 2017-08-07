@@ -13,8 +13,10 @@ module.exports = robot => {
 
         try {
             const config = await context.config('config.yml');
-            if (config.requestInfoDefaultTitles.includes(title.toLowerCase())) {
-                badTitle = true;
+            if (config.requestInfoDefaultTitles) {
+                if (config.requestInfoDefaultTitles.includes(title.toLowerCase())) {
+                    badTitle = true;
+                }
             }
             if (!body || badTitle) {
                 context.github.issues.createComment(context.issue({body: config.requestInfoReplyComment}));
