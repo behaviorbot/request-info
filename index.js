@@ -12,7 +12,7 @@ module.exports = robot => {
         }
 
         try {
-            const config = await context.config('config.yml');
+            const config = await context.config('config.yml', {requestInfoReplyComment: 'The maintainers of this repository would appreciate it if you could provide more information.'});
             if (config.requestInfoDefaultTitles) {
                 if (config.requestInfoDefaultTitles.includes(title.toLowerCase())) {
                     badTitle = true;
