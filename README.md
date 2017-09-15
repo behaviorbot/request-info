@@ -29,6 +29,10 @@ requestInfoDefaultTitles:
 # *OPTIONAL* Label to be added to Issues and Pull Requests with insufficient information given
 requestInfoLabelToAdd: needs-more-info
 ```
+3. If you' prefer not to add a `.github/config.yml`, you can simply install the bot and it was comment on issues and pull reuqests with empty bodies with the comment:
+```
+The maintainers of this repository would appreciate it if you could provide more information.
+```
 
 ## Setup
 
