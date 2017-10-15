@@ -28,8 +28,15 @@ requestInfoDefaultTitles:
 
 # *OPTIONAL* Label to be added to Issues and Pull Requests with insufficient information given
 requestInfoLabelToAdd: needs-more-info
+
+# *OPTIONAL* Only warn about insufficient information on these events type
+# Keys must be lowercase. Valid values are 'issue' and 'pullRequest'
+requestInfoLabelToAdd:
+  pullRequest: true
+  issue: true
+
 ```
-3. If you' prefer not to add a `.github/config.yml`, you can simply install the bot and it was comment on issues and pull reuqests with empty bodies with the comment:
+3. If you' prefer not to add a `.github/config.yml`, you can simply install the bot and it was comment on issues and pull requests with empty bodies with the comment:
 ```
 The maintainers of this repository would appreciate it if you could provide more information.
 ```

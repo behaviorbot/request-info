@@ -5,14 +5,26 @@ module.exports = robot => {
     let title
     let body
     let badTitle
+    let eventSrc = "pullRequest"
     if (context.payload.pull_request) {
       ({title, body} = context.payload.pull_request)
     } else {
+      eventSrc = "issue"
       ({title, body} = context.payload.issue)
     }
 
     try {
-      const config = await context.config('config.yml', {requestInfoReplyComment: 'The maintainers of this repository would appreciate it if you could provide more information.'})
+      const config = await context.config('config.yml', {
+        requestInfoReplyComment: 'The maintainers of this repository would appreciate it if you could provide more information.',
+        requestInfoOn: {
+          issue: true,
+          pullRequest: true
+        }
+      })
+
+      if (!config.requestInfoOn[eventSrc])
+        return
+
       if (config.requestInfoDefaultTitles) {
         if (config.requestInfoDefaultTitles.includes(title.toLowerCase())) {
           badTitle = true
