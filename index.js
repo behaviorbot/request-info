@@ -4,8 +4,7 @@ const DEFAULT_CONFIG = {
     issue: true,
     pullRequest: true
   }
-};
-
+}
 
 module.exports = robot => {
   robot.on('pull_request.opened', receive)
@@ -15,19 +14,20 @@ module.exports = robot => {
     let body
     let badTitle
 
-    let eventSrc = "issue";
+    let eventSrc = 'issue'
     if (context.payload.pull_request) {
-      eventSrc = "pullRequest";
+      eventSrc = 'pullRequest';
       ({title, body} = context.payload.pull_request)
     } else {
       ({title, body} = context.payload.issue)
     }
 
     try {
-      const config = await context.config('config.yml', DEFAULT_CONFIG);
+      const config = await context.config('config.yml', DEFAULT_CONFIG)
 
-      if (!config.requestInfoOn[eventSrc])
+      if (!config.requestInfoOn[eventSrc]) {
         return
+      }
 
       if (config.requestInfoDefaultTitles) {
         if (config.requestInfoDefaultTitles.includes(title.toLowerCase())) {
