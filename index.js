@@ -1,4 +1,4 @@
-const DEFAULT_CONFIG = {
+const defaultConfig = {
   requestInfoReplyComment: 'The maintainers of this repository would appreciate it if you could provide more information.',
   requestInfoOn: {
     issue: true,
@@ -16,14 +16,14 @@ module.exports = robot => {
 
     let eventSrc = 'issue'
     if (context.payload.pull_request) {
-      eventSrc = 'pullRequest';
       ({title, body} = context.payload.pull_request)
+      eventSrc = 'pullRequest'
     } else {
       ({title, body} = context.payload.issue)
     }
 
     try {
-      const config = await context.config('config.yml', DEFAULT_CONFIG)
+      const config = await context.config('config.yml', defaultConfig)
 
       if (!config.requestInfoOn[eventSrc]) {
         return
@@ -35,7 +35,7 @@ module.exports = robot => {
         }
       }
       if (!body || badTitle) {
-        context.github.issues.createComment(context.issue({body: config.requestInfoReplyComment || DEFAULT_CONFIG.requestInfoReplyComment}))
+        context.github.issues.createComment(context.issue({body: config.requestInfoReplyComment || defaultConfig.requestInfoReplyComment}))
 
         if (config.requestInfoLabelToAdd) {
           // Add label if there is one listed in the yaml file
