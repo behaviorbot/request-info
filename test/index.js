@@ -186,4 +186,29 @@ describe('Request info', () => {
       })
     })
   })
+
+  describe('Request info for random comment', () => {
+    beforeEach(() => {
+      github.repos.getContent.andReturn(Promise.resolve({
+        data: {
+          content: Buffer.from(`requestInfoReplyComment:\n  - Reply comment\n  - Other reply comment`).toString('base64')
+        }
+      }))
+    })
+
+    describe('Posts a random comment', () => {
+      it('selects a random comment and posts it', async () => {
+        await robot.receive(prSuccessEvent)
+
+        expect(github.repos.getContent).toHaveBeenCalledWith({
+          owner: 'hiimbex',
+          repo: 'testing-things',
+          path: '.github/config.yml'
+        })
+
+        expect(github.issues.createComment).toHaveBeenCalled()
+        expect(github.issues.addLabels).toNotHaveBeenCalled()
+      })
+    })
+  })
 })
