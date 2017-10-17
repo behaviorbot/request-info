@@ -17,8 +17,16 @@
 # Configuration for request-info - https://github.com/behaviorbot/request-info
 
 # *Required* Comment to reply with
+# Can be either a string :
 requestInfoReplyComment: >
   We would appreciate it if you could provide us with more info about this issue/pr!
+
+# Or an array:
+requestInfoReplyComment:
+  - Ah no! young blade! That was a trifle short!
+  - Tell me more !
+  - I am sure you can be more effusive
+
 
 # *OPTIONAL* default titles to check against for lack of descriptiveness
 # MUST BE ALL LOWERCASE

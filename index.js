@@ -1,10 +1,5 @@
-const defaultConfig = {
-  requestInfoReplyComment: 'The maintainers of this repository would appreciate it if you could provide more information.',
-  requestInfoOn: {
-    issue: true,
-    pullRequest: true
-  }
-}
+const getComment = require('./lib/getComment')
+const defaultConfig = require('./lib/defaultConfig')
 
 module.exports = robot => {
   robot.on('pull_request.opened', receive)
@@ -35,7 +30,8 @@ module.exports = robot => {
         }
       }
       if (!body || badTitle) {
-        context.github.issues.createComment(context.issue({body: config.requestInfoReplyComment || defaultConfig.requestInfoReplyComment}))
+        const comment = getComment(config.requestInfoReplyComment, defaultConfig.requestInfoReplyComment)
+        context.github.issues.createComment(context.issue({body: comment}))
 
         if (config.requestInfoLabelToAdd) {
           // Add label if there is one listed in the yaml file
