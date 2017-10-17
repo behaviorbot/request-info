@@ -211,4 +211,29 @@ describe('Request info', () => {
       })
     })
   })
+
+  describe('Request info for excluded user', () => {
+    beforeEach(() => {
+      github.repos.getContent.andReturn(Promise.resolve({
+        data: {
+          content: Buffer.from(`requestInfoUserstoExclude:\n  - hiimbex\n  - bexo`).toString('base64')
+        }
+      }))
+    })
+
+    describe('Posts a random comment', () => {
+      it('selects a random comment and posts it', async () => {
+        await robot.receive(prSuccessEvent)
+
+        expect(github.repos.getContent).toHaveBeenCalledWith({
+          owner: 'hiimbex',
+          repo: 'testing-things',
+          path: '.github/config.yml'
+        })
+
+        expect(github.issues.createComment).toNotHaveBeenCalled()
+        expect(github.issues.addLabels).toNotHaveBeenCalled()
+      })
+    })
+  })
 })

@@ -43,6 +43,11 @@ requestInfoLabelToAdd:
   pullRequest: true
   issue: true
 
+# *OPTIONAL* Add a list of people whose Issues/PRs will not be commented on
+# keys must be GitHub usernames
+requestInfoUserstoExclude:
+  - hiimbex
+  - bexo
 ```
 3. If you' prefer not to add a `.github/config.yml`, you can simply install the bot and it was comment on issues and pull requests with empty bodies with the comment:
 ```
