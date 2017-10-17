@@ -16,7 +16,7 @@
 ```yml
 # Configuration for request-info - https://github.com/behaviorbot/request-info
 
-# *Required* Comment to reply with
+# *OPTIONAL* Comment to reply with
 # Can be either a string :
 requestInfoReplyComment: >
   We would appreciate it if you could provide us with more info about this issue/pr!
