@@ -2,19 +2,19 @@ const getComment = require('./lib/getComment')
 const defaultConfig = require('./lib/defaultConfig')
 
 module.exports = robot => {
-  robot.on('pull_request.opened', receive)
-  robot.on('issues.opened', receive)
+  robot.on(['pull_request.opened', 'issues.opened'], receive)
   async function receive (context) {
     let title
     let body
     let badTitle
+    let user
 
     let eventSrc = 'issue'
     if (context.payload.pull_request) {
-      ({title, body} = context.payload.pull_request)
+      ({title, body, user} = context.payload.pull_request)
       eventSrc = 'pullRequest'
     } else {
-      ({title, body} = context.payload.issue)
+      ({title, body, user} = context.payload.issue)
     }
 
     try {
@@ -29,7 +29,14 @@ module.exports = robot => {
           badTitle = true
         }
       }
-      if (!body || badTitle) {
+
+      let notExcludedUser = true
+      if (config.requestInfoUserstoExclude) {
+        if (config.requestInfoUserstoExclude.includes(user.login)) {
+          notExcludedUser = false
+        }
+      }
+      if ((!body || badTitle) && notExcludedUser) {
         const comment = getComment(config.requestInfoReplyComment, defaultConfig.requestInfoReplyComment)
         context.github.issues.createComment(context.issue({body: comment}))
 
