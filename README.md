@@ -37,6 +37,9 @@ requestInfoDefaultTitles:
 # *OPTIONAL* Label to be added to Issues and Pull Requests with insufficient information given
 requestInfoLabelToAdd: needs-more-info
 
+# *OPTIONAL* Require the issue to match an issue template you have in your repository. 
+matchIssueTemplate: true
+
 # *OPTIONAL* Only warn about insufficient information on these events type
 # Keys must be lowercase. Valid values are 'issue' and 'pullRequest'
 requestInfoLabelToAdd:
