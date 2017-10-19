@@ -39,7 +39,7 @@ requestInfoLabelToAdd: needs-more-info
 
 # *OPTIONAL* Only warn about insufficient information on these events type
 # Keys must be lowercase. Valid values are 'issue' and 'pullRequest'
-requestInfoLabelToAdd:
+requestInfoOn:
   pullRequest: true
   issue: true
 
