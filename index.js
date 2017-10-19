@@ -1,6 +1,6 @@
 const getComment = require('./lib/getComment')
 const defaultConfig = require('./lib/defaultConfig')
-const issueTemplateMatches = require('./lib/getIssueTemplate')
+const checkTemplateMatch = require('./lib/checkTemplateMatch')
 
 module.exports = robot => {
   robot.on(['pull_request.opened', 'issues.opened'], receive)
@@ -33,7 +33,7 @@ module.exports = robot => {
       }
 
       if (config.matchIssueTemplate) {
-        if(!issueTemplateChecker.match(body)) {
+        if(!checkTemplateMatch(body)) {
           unmatchedBody = true
         }
       }
