@@ -33,7 +33,7 @@ module.exports = robot => {
       }
 
       if (config.matchIssueTemplate) {
-        if(!checkTemplateMatch(body)) {
+        if (!checkTemplateMatch(body)) {
           unmatchedBody = true
         }
       }
