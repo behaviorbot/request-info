@@ -37,7 +37,7 @@ requestInfoDefaultTitles:
 # *OPTIONAL* Label to be added to Issues and Pull Requests with insufficient information given
 requestInfoLabelToAdd: needs-more-info
 
-# *OPTIONAL* Require the issue to match an issue template you have in your repository. 
+# *OPTIONAL* Require the issue to contain more information than what is provided in the issue template; will fail if the issue body contains just the provided template.
 matchIssueTemplate: true
 
 # *OPTIONAL* Only warn about insufficient information on these events type
