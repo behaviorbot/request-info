@@ -37,6 +37,10 @@ requestInfoDefaultTitles:
 # *OPTIONAL* Label to be added to Issues and Pull Requests with insufficient information given
 requestInfoLabelToAdd: needs-more-info
 
+# *OPTIONAL* Require Pull Requests to contain more information than what is provided in the PR template
+# Will fail if the pull request's body is equal to the provided template
+checkPullRequestTemplate: true
+
 # *OPTIONAL* Only warn about insufficient information on these events type
 # Keys must be lowercase. Valid values are 'issue' and 'pullRequest'
 requestInfoOn:

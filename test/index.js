@@ -5,6 +5,7 @@ const issueSuccessEvent = require('./events/issueSuccessEvent')
 const issueFailEvent = require('./events/issueFailEvent')
 const prSuccessEvent = require('./events/prSuccessEvent')
 const prFailEvent = require('./events/prFailEvent')
+const prTemplateBodyEvent = require('./events/prTemplateBodyEvent')
 
 describe('Request info', () => {
   let robot
@@ -233,6 +234,96 @@ describe('Request info', () => {
 
         expect(github.issues.createComment).toNotHaveBeenCalled()
         expect(github.issues.addLabels).toNotHaveBeenCalled()
+      })
+    })
+  })
+
+  describe('Request info based on Pull Request template', () => {
+    describe('If the setting is set to true', () => {
+      beforeEach(() => {
+        github.repos.getContent.andCall(({path}) => {
+          if (path === '.github/PULL_REQUEST_TEMPLATE.md') {
+            return Promise.resolve({
+              data: {
+                content: Buffer.from('This is a PR template, please update me')
+              }
+            })
+          }
+
+          return Promise.resolve({
+            data: {
+              content: Buffer.from(`checkPullRequestTemplate: true`).toString('base64')
+            }
+          })
+        })
+      })
+
+      it('Posts a comment when PR body is equal to template', async () => {
+        await robot.receive(prTemplateBodyEvent)
+
+        expect(github.repos.getContent).toHaveBeenCalledWith({
+          owner: 'hiimbex',
+          repo: 'testing-things',
+          path: '.github/config.yml'
+        })
+
+        expect(github.issues.createComment).toHaveBeenCalled()
+      })
+
+      it('Does not post a comment when PR body is different from template', async () => {
+        await robot.receive(prFailEvent)
+
+        expect(github.repos.getContent).toHaveBeenCalledWith({
+          owner: 'hiimbex',
+          repo: 'testing-things',
+          path: '.github/config.yml'
+        })
+
+        expect(github.issues.createComment).toNotHaveBeenCalled()
+      })
+    })
+
+    describe('If the setting is set to false', () => {
+      beforeEach(() => {
+        github.repos.getContent.andCall(({path}) => {
+          if (path === '.github/PULL_REQUEST_TEMPLATE.md') {
+            return Promise.resolve({
+              data: {
+                content: Buffer.from('This is a PR template, please update me')
+              }
+            })
+          }
+
+          return Promise.resolve({
+            data: {
+              content: Buffer.from(`checkPullRequestTemplate: false`).toString('base64')
+            }
+          })
+        })
+      })
+
+      it('Does not post a comment when PR body is equal to template', async () => {
+        await robot.receive(prTemplateBodyEvent)
+
+        expect(github.repos.getContent).toHaveBeenCalledWith({
+          owner: 'hiimbex',
+          repo: 'testing-things',
+          path: '.github/config.yml'
+        })
+
+        expect(github.issues.createComment).toNotHaveBeenCalled()
+      })
+
+      it('Does not post a comment when PR body is different from template', async () => {
+        await robot.receive(prFailEvent)
+
+        expect(github.repos.getContent).toHaveBeenCalledWith({
+          owner: 'hiimbex',
+          repo: 'testing-things',
+          path: '.github/config.yml'
+        })
+
+        expect(github.issues.createComment).toNotHaveBeenCalled()
       })
     })
   })

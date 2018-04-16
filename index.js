@@ -1,5 +1,6 @@
 const getComment = require('./lib/getComment')
 const defaultConfig = require('./lib/defaultConfig')
+const PullRequestBodyChecker = require('./lib/PullRequestBodyChecker')
 
 module.exports = robot => {
   robot.on(['pull_request.opened', 'issues.opened'], receive)
@@ -7,6 +8,7 @@ module.exports = robot => {
     let title
     let body
     let badTitle
+    let badBody
     let user
 
     let eventSrc = 'issue'
@@ -30,13 +32,19 @@ module.exports = robot => {
         }
       }
 
+      if (eventSrc === 'pullRequest') {
+        if (!(await PullRequestBodyChecker.isBodyValid(body, config, context))) {
+          badBody = true
+        }
+      }
+
       let notExcludedUser = true
       if (config.requestInfoUserstoExclude) {
         if (config.requestInfoUserstoExclude.includes(user.login)) {
           notExcludedUser = false
         }
       }
-      if ((!body || badTitle) && notExcludedUser) {
+      if ((!body || badTitle || badBody) && notExcludedUser) {
         const comment = getComment(config.requestInfoReplyComment, defaultConfig.requestInfoReplyComment)
         context.github.issues.createComment(context.issue({body: comment}))
 
