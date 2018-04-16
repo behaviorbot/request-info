@@ -53,7 +53,7 @@ requestInfoUserstoExclude:
   - hiimbex
   - bexo
 ```
-3. If you' prefer not to add a `.github/config.yml`, you can simply install the bot and it was comment on issues and pull requests with empty bodies with the comment:
+3. If you prefer not to add a `.github/config.yml` file, you can simply install the bot and it would comment on issues and pull requests that have empty bodies, with the comment:
 ```
 The maintainers of this repository would appreciate it if you could provide more information.
 ```
