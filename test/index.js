@@ -28,7 +28,7 @@ describe('Request info', () => {
         addLabels: expect.createSpy(),
         getIssueLabels: expect.createSpy().andReturn(Promise.resolve({
           data: [{
-            name: 'abc'
+            name: 'request-info'
           }]
         }))
       }
@@ -46,6 +46,7 @@ describe('Request info', () => {
           repo: 'testing-things',
           path: '.github/config.yml'
         })
+
         expect(github.issues.createComment).toHaveBeenCalled()
         expect(github.issues.addLabels).toHaveBeenCalled()
       })
