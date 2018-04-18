@@ -3,7 +3,7 @@ const defaultConfig = require('./lib/defaultConfig')
 const PullRequestBodyChecker = require('./lib/PullRequestBodyChecker')
 
 module.exports = robot => {
-  robot.on(['pull_request.opened', 'issues.opened'], receive)
+  robot.on(['pull_request.opened', 'issues.opened', 'issues.labeled', 'pull_request.labeled'], receive)
   async function receive (context) {
     let title
     let body
@@ -45,17 +45,14 @@ module.exports = robot => {
         }
       }
       if ((!body || badTitle || badBody) && notExcludedUser) {
-        robot.on(['issues.labeled', 'pull_request.labeled'], async function issuePullLabeled (context) {
-          const label = await context.github.issues.getIssueLabels(context.issue())
-          const labelData = label.data
-          const requestLabel = labelData.find(label => {
-            return label.name === 'request-info'
-          })
-          if (requestLabel) {
-            const comment = getComment(config.requestInfoReplyComment, defaultConfig.requestInfoReplyComment)
-            context.github.issues.createComment(context.issue({body: comment}))
-          }
+        const label = await context.github.issues.getIssueLabels(context.issue())
+        const requestLabel = label.data.find(label => {
+          return label.name === 'request-info'
         })
+        if (requestLabel) {
+          const comment = getComment(config.requestInfoReplyComment, defaultConfig.requestInfoReplyComment)
+          context.github.issues.createComment(context.issue({body: comment}))
+        }
 
         if (config.requestInfoLabelToAdd) {
           // Add label if there is one listed in the yaml file
