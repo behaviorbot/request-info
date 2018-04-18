@@ -45,8 +45,17 @@ module.exports = robot => {
         }
       }
       if ((!body || badTitle || badBody) && notExcludedUser) {
-        const comment = getComment(config.requestInfoReplyComment, defaultConfig.requestInfoReplyComment)
-        context.github.issues.createComment(context.issue({body: comment}))
+        robot.on(['issues.labeled', 'pull_request.labeled'], async function issuePullLabeled (context) {
+          const label = await context.github.issues.getIssueLabels(context.issue())
+          const labelData = label.data
+          const requestLabel = labelData.find(label => {
+            return label.name === 'request-info'
+          })
+          if (requestLabel) {
+            const comment = getComment(config.requestInfoReplyComment, defaultConfig.requestInfoReplyComment)
+            context.github.issues.createComment(context.issue({body: comment}))
+          }
+        })
 
         if (config.requestInfoLabelToAdd) {
           // Add label if there is one listed in the yaml file

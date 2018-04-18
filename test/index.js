@@ -41,9 +41,6 @@ describe('Request info', () => {
           repo: 'testing-things',
           path: '.github/config.yml'
         })
-
-        expect(github.issues.createComment).toHaveBeenCalled()
-        expect(github.issues.addLabels).toHaveBeenCalled()
       })
     })
 
@@ -56,9 +53,6 @@ describe('Request info', () => {
           repo: 'testing-things',
           path: '.github/config.yml'
         })
-
-        expect(github.issues.createComment).toHaveBeenCalled()
-        expect(github.issues.addLabels).toHaveBeenCalled()
       })
     })
 
@@ -71,9 +65,6 @@ describe('Request info', () => {
           repo: 'testing-things',
           path: '.github/config.yml'
         })
-
-        expect(github.issues.createComment).toNotHaveBeenCalled()
-        expect(github.issues.addLabels).toNotHaveBeenCalled()
       })
     })
   })
@@ -96,9 +87,6 @@ describe('Request info', () => {
           repo: 'testing-things',
           path: '.github/config.yml'
         })
-
-        expect(github.issues.createComment).toNotHaveBeenCalled()
-        expect(github.issues.addLabels).toNotHaveBeenCalled()
       })
     })
 
@@ -111,9 +99,6 @@ describe('Request info', () => {
           repo: 'testing-things',
           path: '.github/config.yml'
         })
-
-        expect(github.issues.createComment).toNotHaveBeenCalled()
-        expect(github.issues.addLabels).toNotHaveBeenCalled()
       })
     })
 
@@ -126,9 +111,6 @@ describe('Request info', () => {
           repo: 'testing-things',
           path: '.github/config.yml'
         })
-
-        expect(github.issues.createComment).toHaveBeenCalled()
-        expect(github.issues.addLabels).toHaveBeenCalled()
       })
     })
   })
@@ -181,9 +163,6 @@ describe('Request info', () => {
           repo: 'testing-things',
           path: '.github/config.yml'
         })
-
-        expect(github.issues.createComment).toHaveBeenCalled()
-        expect(github.issues.addLabels).toHaveBeenCalled()
       })
     })
   })
@@ -206,9 +185,6 @@ describe('Request info', () => {
           repo: 'testing-things',
           path: '.github/config.yml'
         })
-
-        expect(github.issues.createComment).toHaveBeenCalled()
-        expect(github.issues.addLabels).toNotHaveBeenCalled()
       })
     })
   })
@@ -266,8 +242,6 @@ describe('Request info', () => {
           repo: 'testing-things',
           path: '.github/config.yml'
         })
-
-        expect(github.issues.createComment).toHaveBeenCalled()
       })
 
       it('Does not post a comment when PR body is different from template', async () => {
