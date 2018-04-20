@@ -2,3 +2,4 @@
 node_modules
 *.pem
 .DS_Store
+package-lock.json

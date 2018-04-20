@@ -20,7 +20,8 @@
     "devDependencies": {
         "eslint-plugin-import": "^2.7.0",
         "expect": "^1.20.2",
-        "localtunnel": "^1.8.3",
+        "smee-client": "^1.0.1",
+        "nodemon": "^1.17.2",
         "mocha": "^3.4.2",
         "standard": "^10.0.3"
     },
@@ -34,6 +35,6 @@
         "npm": ">= 5.3.0"
     },
     "dependencies": {
-        "probot": "^3.0.0"
+        "probot": "^6.0.0"
     }
 }
