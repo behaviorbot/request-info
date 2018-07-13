@@ -25,7 +25,12 @@ describe('Request info', () => {
       },
       issues: {
         createComment: expect.createSpy(),
-        addLabels: expect.createSpy()
+        addLabels: expect.createSpy(),
+        getIssueLabels: expect.createSpy().andReturn(Promise.resolve({
+          data: [{
+            name: 'request-info'
+          }]
+        }))
       }
     }
     robot.auth = () => Promise.resolve(github)
