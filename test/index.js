@@ -7,6 +7,8 @@ const prSuccessEvent = require('./events/prSuccessEvent')
 const prFailEvent = require('./events/prFailEvent')
 const prTemplateBodyEvent = require('./events/prTemplateBodyEvent')
 const issueTemplateBodyEvent = require('./events/issueTemplateBodyEvent.json')
+const issueFirstTemplateBodyEvent = require('./events/issueFirstTemplateBodyEvent.json')
+const issueSecondTemplateBodyEvent = require('./events/issueSecondTemplateBodyEvent.json')
 
 describe('Request info', () => {
   let robot
@@ -413,7 +415,7 @@ describe('Request info', () => {
             if (path === '.github/ISSUE_TEMPLATE.md') {
               return Promise.resolve({
                 data: {
-                  content: Buffer.from('This is an issue template, please update me')
+                  content: Buffer.from('This is an issue template, please update me').toString('base64')
                 }
               })
             }
@@ -471,17 +473,22 @@ describe('Request info', () => {
             }
 
             if (path === '.github/ISSUE_TEMPLATE/') {
-              return Promise.resolve([{
-                path: './github/ISSUE_TEMPLATE/first-template.md'
-              },
-              {path: './github/ISSUE_TEMPLATE/second-template.md'}
-              ])
+              return Promise.resolve({ data: [
+                {
+                  name: 'first-remplate.md',
+                  path: '.github/ISSUE_TEMPLATE/first-template.md'
+                },
+                {
+                  name: 'second-remplate.md',
+                  path: '.github/ISSUE_TEMPLATE/second-template.md'
+                }]
+              })
             }
 
             if (path === '.github/ISSUE_TEMPLATE/first-template.md') {
               return Promise.resolve({
                 data: {
-                  content: Buffer.from('This is the first issue template, please update me')
+                  content: Buffer.from('This is the first issue template, please update me').toString('base64')
                 }
               })
             }
@@ -489,33 +496,71 @@ describe('Request info', () => {
             if (path === '.github/ISSUE_TEMPLATE/second-template.md') {
               return Promise.resolve({
                 data: {
-                  content: Buffer.from('This is the second issue template, please update me')
+                  content: Buffer.from('This is the second issue template, please update me').toString('base64')
                 }
               })
             }
 
-            return Promise.resolve({
-              data: {
-                content: Buffer.from(`checkIssueTemplate: true`).toString('base64')
-              }
-            })
+            if (path === '.github/config.yml') {
+              return Promise.resolve({
+                data: {
+                  content: Buffer.from(`checkIssueTemplate: true`).toString('base64')
+                }
+              })
+            }
+
+            console.log(`querying path: ${path}`)
+
+            return Promise.reject(`Unhandled code path requested: ${path}`)
           })
         })
 
-        it('posts a message when issue body is empty', () => {
-          expect(false).is.true()
+        it('posts a message when issue body is empty', async () => {
+          await robot.receive(issueSuccessEvent)
+
+          expect(github.repos.getContent).toHaveBeenCalledWith({
+            owner: 'hiimbex',
+            repo: 'testing-things',
+            path: '.github/config.yml'
+          })
+
+          expect(github.issues.createComment).toHaveBeenCalled()
         })
 
-        it('posts a message when issue body matches first template', () => {
-          expect(false).is.true()
+        it('posts a message when issue body matches first template', async () => {
+          await robot.receive(issueFirstTemplateBodyEvent)
+
+          expect(github.repos.getContent).toHaveBeenCalledWith({
+            owner: 'hiimbex',
+            repo: 'testing-things',
+            path: '.github/config.yml'
+          })
+
+          expect(github.issues.createComment).toHaveBeenCalled()
         })
 
-        it('posts a message when issue body matches second template', () => {
-          expect(false).is.true()
+        it('posts a message when issue body matches second template', async () => {
+          await robot.receive(issueSecondTemplateBodyEvent)
+
+          expect(github.repos.getContent).toHaveBeenCalledWith({
+            owner: 'hiimbex',
+            repo: 'testing-things',
+            path: '.github/config.yml'
+          })
+
+          expect(github.issues.createComment).toHaveBeenCalled()
         })
 
-        it('does not post a message when issue body is different to all templates', () => {
-          expect(false).is.true()
+        it('does not post a message when issue body is different to all templates', async () => {
+          await robot.receive(issueFailEvent)
+
+          expect(github.repos.getContent).toHaveBeenCalledWith({
+            owner: 'hiimbex',
+            repo: 'testing-things',
+            path: '.github/config.yml'
+          })
+
+          expect(github.issues.createComment).toNotHaveBeenCalled()
         })
       })
     })
