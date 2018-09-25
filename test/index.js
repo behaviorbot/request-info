@@ -371,7 +371,7 @@ describe('Request info', () => {
         beforeEach(() => {
           github.repos.getContent.andCall(({path}) => {
             if (path === '.github/ISSUE_TEMPLATE.md') {
-              return Promise.reject('404')
+              return Promise.reject(new Error('404'))
             }
 
             return Promise.resolve({
@@ -464,20 +464,58 @@ describe('Request info', () => {
       })
 
       describe('And the user has multiple templates defined', () => {
+        beforeEach(() => {
+          github.repos.getContent.andCall(({path}) => {
+            if (path === '.github/ISSUE_TEMPLATE.md') {
+              return Promise.reject(new Error('404'))
+            }
+
+            if (path === '.github/ISSUE_TEMPLATE/') {
+              return Promise.resolve([{
+                path: './github/ISSUE_TEMPLATE/first-template.md'
+              },
+              {path: './github/ISSUE_TEMPLATE/second-template.md'}
+              ])
+            }
+
+            if (path === '.github/ISSUE_TEMPLATE/first-template.md') {
+              return Promise.resolve({
+                data: {
+                  content: Buffer.from('This is the first issue template, please update me')
+                }
+              })
+            }
+
+            if (path === '.github/ISSUE_TEMPLATE/second-template.md') {
+              return Promise.resolve({
+                data: {
+                  content: Buffer.from('This is the second issue template, please update me')
+                }
+              })
+            }
+
+            return Promise.resolve({
+              data: {
+                content: Buffer.from(`checkIssueTemplate: true`).toString('base64')
+              }
+            })
+          })
+        })
+
         it('posts a message when issue body is empty', () => {
-          expect(false).is.true
+          expect(false).is.true()
         })
 
         it('posts a message when issue body matches first template', () => {
-          expect(false).is.true
+          expect(false).is.true()
         })
 
         it('posts a message when issue body matches second template', () => {
-          expect(false).is.true
+          expect(false).is.true()
         })
 
         it('does not post a message when issue body is different to all templates', () => {
-          expect(false).is.true
+          expect(false).is.true()
         })
       })
     })
