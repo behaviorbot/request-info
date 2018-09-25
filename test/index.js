@@ -327,4 +327,58 @@ describe('Request info', () => {
       })
     })
   })
+
+  describe('Request info based on issue template', () => {
+    describe('If the setting is set to false', () => {
+      it('posts a message when issue body is empty', () => {
+        expect(false).is.true()
+      })
+      it('does not post a message when PR body has text', () => {
+        expect(false).is.true()
+      })
+    })
+
+    describe('If the setting is set to true', () => {
+      describe('And the user has no templates defined', () => {
+        it('posts a message when issue body is empty', () => {
+          expect(false).is.true
+        })
+        it('does not post a message when issue body has text', () => {
+          expect(false).is.true
+        })
+      })
+
+      describe('And the user has one template defined', () => {
+        it('posts a message when issue body is empty', () => {
+          expect(false).is.true
+        })
+
+        it('posts a message when issue body matches template', () => {
+          expect(false).is.true
+        })
+
+        it('does not post a message when issue body is different to template', () => {
+          expect(false).is.true
+        })
+      })
+
+      describe('And the user has multiple templates defined', () => {
+        it('posts a message when issue body is empty', () => {
+          expect(false).is.true
+        })
+
+        it('posts a message when issue body matches first template', () => {
+          expect(false).is.true
+        })
+
+        it('posts a message when issue body matches second template', () => {
+          expect(false).is.true
+        })
+
+        it('does not post a message when issue body is different to all templates', () => {
+          expect(false).is.true
+        })
+      })
+    })
+  })
 })
