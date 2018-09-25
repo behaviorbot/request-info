@@ -6,6 +6,7 @@ const issueFailEvent = require('./events/issueFailEvent')
 const prSuccessEvent = require('./events/prSuccessEvent')
 const prFailEvent = require('./events/prFailEvent')
 const prTemplateBodyEvent = require('./events/prTemplateBodyEvent')
+const issueTemplateBodyEvent = require('./events/issueTemplateBodyEvent.json')
 
 describe('Request info', () => {
   let robot
@@ -366,26 +367,99 @@ describe('Request info', () => {
     })
 
     describe('If the setting is set to true', () => {
-      describe('And the user has no templates defined', () => {
-        it('posts a message when issue body is empty', () => {
-          expect(false).is.true
+      describe('And the user has no issue template defined', () => {
+        beforeEach(() => {
+          github.repos.getContent.andCall(({path}) => {
+            if (path === '.github/ISSUE_TEMPLATE.md') {
+              return Promise.reject('404')
+            }
+
+            return Promise.resolve({
+              data: {
+                content: Buffer.from(`checkIssueTemplate: false`).toString('base64')
+              }
+            })
+          })
         })
-        it('does not post a message when issue body has text', () => {
-          expect(false).is.true
+
+        it('posts a message when issue body is empty', async () => {
+          await robot.receive(issueSuccessEvent)
+
+          expect(github.repos.getContent).toHaveBeenCalledWith({
+            owner: 'hiimbex',
+            repo: 'testing-things',
+            path: '.github/config.yml'
+          })
+
+          expect(github.issues.createComment).toHaveBeenCalled()
+        })
+
+        it('does not post a message when PR body has text', async () => {
+          await robot.receive(issueFailEvent)
+
+          expect(github.repos.getContent).toHaveBeenCalledWith({
+            owner: 'hiimbex',
+            repo: 'testing-things',
+            path: '.github/config.yml'
+          })
+
+          expect(github.issues.createComment).toNotHaveBeenCalled()
         })
       })
 
       describe('And the user has one template defined', () => {
-        it('posts a message when issue body is empty', () => {
-          expect(false).is.true
+        beforeEach(() => {
+          github.repos.getContent.andCall(({path}) => {
+            if (path === '.github/ISSUE_TEMPLATE.md') {
+              return Promise.resolve({
+                data: {
+                  content: Buffer.from('This is an issue template, please update me')
+                }
+              })
+            }
+
+            return Promise.resolve({
+              data: {
+                content: Buffer.from(`checkIssueTemplate: true`).toString('base64')
+              }
+            })
+          })
         })
 
-        it('posts a message when issue body matches template', () => {
-          expect(false).is.true
+        it('posts a message when issue body is empty', async () => {
+          await robot.receive(issueSuccessEvent)
+
+          expect(github.repos.getContent).toHaveBeenCalledWith({
+            owner: 'hiimbex',
+            repo: 'testing-things',
+            path: '.github/config.yml'
+          })
+
+          expect(github.issues.createComment).toHaveBeenCalled()
         })
 
-        it('does not post a message when issue body is different to template', () => {
-          expect(false).is.true
+        it('posts a message when issue body matches template', async () => {
+          await robot.receive(issueTemplateBodyEvent)
+
+          expect(github.repos.getContent).toHaveBeenCalledWith({
+            owner: 'hiimbex',
+            repo: 'testing-things',
+            path: '.github/config.yml'
+          })
+
+          expect(github.issues.createComment).toHaveBeenCalled()
+        })
+
+        it('does not post a message when issue body is different to template', async () => {
+          await robot.receive(issueFailEvent)
+
+          expect(github.repos.getContent).toHaveBeenCalledWith({
+            owner: 'hiimbex',
+            repo: 'testing-things',
+            path: '.github/config.yml'
+          })
+
+          expect(github.issues.createComment).toNotHaveBeenCalled()
         })
       })
 
