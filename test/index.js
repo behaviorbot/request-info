@@ -509,9 +509,7 @@ describe('Request info', () => {
               })
             }
 
-            console.log(`querying path: ${path}`)
-
-            return Promise.reject(`Unhandled code path requested: ${path}`)
+            return Promise.reject(new Error(`Unhandled code path requested: '${path}'`))
           })
         })
 
