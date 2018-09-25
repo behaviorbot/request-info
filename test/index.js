@@ -475,11 +475,9 @@ describe('Request info', () => {
             if (path === '.github/ISSUE_TEMPLATE/') {
               return Promise.resolve({ data: [
                 {
-                  name: 'first-remplate.md',
                   path: '.github/ISSUE_TEMPLATE/first-template.md'
                 },
                 {
-                  name: 'second-remplate.md',
                   path: '.github/ISSUE_TEMPLATE/second-template.md'
                 }]
               })
