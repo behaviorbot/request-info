@@ -330,11 +330,38 @@ describe('Request info', () => {
 
   describe('Request info based on issue template', () => {
     describe('If the setting is set to false', () => {
-      it('posts a message when issue body is empty', () => {
-        expect(false).is.true()
+      beforeEach(() => {
+        github.repos.getContent.andCall(({path}) => {
+          return Promise.resolve({
+            data: {
+              content: Buffer.from(`checkIssueTemplate: false`).toString('base64')
+            }
+          })
+        })
       })
-      it('does not post a message when PR body has text', () => {
-        expect(false).is.true()
+
+      it('posts a message when issue body is empty', async () => {
+        await robot.receive(issueSuccessEvent)
+
+        expect(github.repos.getContent).toHaveBeenCalledWith({
+          owner: 'hiimbex',
+          repo: 'testing-things',
+          path: '.github/config.yml'
+        })
+
+        expect(github.issues.createComment).toHaveBeenCalled()
+      })
+
+      it('does not post a message when PR body has text', async () => {
+        await robot.receive(issueFailEvent)
+
+        expect(github.repos.getContent).toHaveBeenCalledWith({
+          owner: 'hiimbex',
+          repo: 'testing-things',
+          path: '.github/config.yml'
+        })
+
+        expect(github.issues.createComment).toNotHaveBeenCalled()
       })
     })
 
