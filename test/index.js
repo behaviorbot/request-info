@@ -1,5 +1,5 @@
 const expect = require('expect')
-const {createRobot} = require('probot')
+const {Application} = require('probot')
 const plugin = require('..')
 const issueSuccessEvent = require('./events/issueSuccessEvent')
 const issueFailEvent = require('./events/issueFailEvent')
@@ -12,7 +12,7 @@ describe('Request info', () => {
   let github
 
   beforeEach(() => {
-    robot = createRobot()
+    robot = new Application()
     plugin(robot)
 
     github = {
