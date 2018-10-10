@@ -60,4 +60,18 @@ module.exports = robot => {
       }
     }
   }
+
+  // Say hi!
+  const NAME = 'introduction-to-github-apps'
+  robot.on('installation_repositories.added', async context => {
+    const includes = context.payload.repositories_added.some(r => r.name === NAME)
+    if (!includes) return
+
+    return context.github.issues.create({
+      owner: context.payload.installation.account.login,
+      repo: NAME,
+      title: 'Great job installing WIP!',
+      body: 'Some body'
+    })
+  })
 }
