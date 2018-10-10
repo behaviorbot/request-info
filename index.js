@@ -67,11 +67,11 @@ module.exports = robot => {
     const includes = context.payload.repositories_added.some(r => r.name === NAME)
     if (!includes) return
 
-    return context.github.issues.create({
+    return context.github.issues.createComment({
       owner: context.payload.installation.account.login,
       repo: NAME,
-      title: 'Great job installing WIP!',
-      body: 'Some body'
+      number: 2.
+      body: 'Well done! You successfully installed the request info app.\n\n_disclaimer_ If you use this app in future repos, you won\'t get a message like this. This is just for Learning Lab!'
     })
   })
 }
