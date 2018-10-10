@@ -4,6 +4,7 @@ const PullRequestBodyChecker = require('./lib/PullRequestBodyChecker')
 const getConfig = require('probot-config')
 
 module.exports = robot => {
+  robot.on('installation_repositories.added', learningLabWelcome)
   robot.on(['pull_request.opened', 'issues.opened'], receive)
   async function receive (context) {
     let title
@@ -63,7 +64,7 @@ module.exports = robot => {
 
   // Say hi!
   const NAME = 'introduction-to-github-apps'
-  robot.on('installation_repositories.added', async context => {
+  async function learningLabWelcome (context) {
     const includes = context.payload.repositories_added.some(r => r.name === NAME)
     if (!includes) return
 
