@@ -70,7 +70,7 @@ module.exports = robot => {
     return context.github.issues.createComment({
       owner: context.payload.installation.account.login,
       repo: NAME,
-      number: 2.
+      number: 2,
       body: 'Well done! You successfully installed the request info app.\n\n_disclaimer_ If you use this app in future repos, you won\'t get a message like this. This is just for Learning Lab!'
     })
   })
