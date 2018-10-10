@@ -348,7 +348,7 @@ describe('Request info', () => {
     })
 
     it('does not open a new issue if the repo name is not right', async () => {
-      event.payload.repositories_added = []
+      event.payload.repositories_added = [{ name: 'NOT-introduction-to-github-apps' }]
       await robot.receive(event)
       expect(github.issues.createComment).toNotHaveBeenCalled()
     })
