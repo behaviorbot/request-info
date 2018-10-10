@@ -25,8 +25,7 @@ describe('Request info', () => {
       },
       issues: {
         createComment: expect.createSpy(),
-        addLabels: expect.createSpy(),
-        create: expect.createSpy()
+        addLabels: expect.createSpy()
       }
     }
     robot.auth = () => Promise.resolve(github)
@@ -345,13 +344,13 @@ describe('Request info', () => {
 
     it('opens a new issue', async () => {
       await robot.receive(event)
-      expect(github.issues.create).toHaveBeenCalled()
+      expect(github.issues.createComment).toHaveBeenCalled()
     })
 
     it('does not open a new issue if the repo name is not right', async () => {
       event.payload.repositories_added = []
       await robot.receive(event)
-      expect(github.issues.create).toNotHaveBeenCalled()
+      expect(github.issues.createComment).toNotHaveBeenCalled()
     })
   })
 })
