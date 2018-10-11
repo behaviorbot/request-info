@@ -5,7 +5,7 @@ const getConfig = require('probot-config')
 
 module.exports = app => {
   app.on('installation_repositories.added', learningLabWelcome)
-  app.on(['pull_request.opened', 'issues.opened'], receive)G
+  app.on(['pull_request.opened', 'issues.opened'], receive)
   async function receive (context) {
     let title
     let body
