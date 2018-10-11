@@ -8,12 +8,12 @@ const prFailEvent = require('./events/prFailEvent')
 const prTemplateBodyEvent = require('./events/prTemplateBodyEvent')
 
 describe('Request info', () => {
-  let robot
+  let app
   let github
 
   beforeEach(() => {
-    robot = new Application()
-    plugin(robot)
+    app = new Application()
+    plugin(app)
 
     github = {
       repos: {
@@ -28,13 +28,13 @@ describe('Request info', () => {
         addLabels: expect.createSpy()
       }
     }
-    robot.auth = () => Promise.resolve(github)
+    app.auth = () => Promise.resolve(github)
   })
 
   describe('Request info on both issues and pull requests', () => {
     describe('Posts a comment because...', () => {
       it('there wasn\'t enough info provided in an issue', async () => {
-        await robot.receive(issueSuccessEvent)
+        await app.receive(issueSuccessEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
@@ -49,7 +49,7 @@ describe('Request info', () => {
 
     describe('Posts a comment because...', () => {
       it('there wasn\'t enough info provided in a pull request', async () => {
-        await robot.receive(prSuccessEvent)
+        await app.receive(prSuccessEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
@@ -64,7 +64,7 @@ describe('Request info', () => {
 
     describe('Does not post a comment because...', () => {
       it('there was a body in issue', async () => {
-        await robot.receive(issueFailEvent)
+        await app.receive(issueFailEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
@@ -89,7 +89,7 @@ describe('Request info', () => {
 
     describe('Does not post a comment because...', () => {
       it("'issue' type is disabled even if there wasn't enough info provided", async () => {
-        await robot.receive(issueSuccessEvent)
+        await app.receive(issueSuccessEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
@@ -104,7 +104,7 @@ describe('Request info', () => {
 
     describe('Does not post a comment because...', () => {
       it('there was a body in issue', async () => {
-        await robot.receive(issueFailEvent)
+        await app.receive(issueFailEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
@@ -119,7 +119,7 @@ describe('Request info', () => {
 
     describe('Posts a comment because...', () => {
       it('there wasn\'t enough info provided in a pull request', async () => {
-        await robot.receive(prSuccessEvent)
+        await app.receive(prSuccessEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
@@ -144,7 +144,7 @@ describe('Request info', () => {
 
     describe('Does not post a comment because...', () => {
       it("'pullRequest' type is disabled even if there wasn't enough info provided", async () => {
-        await robot.receive(prSuccessEvent)
+        await app.receive(prSuccessEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
@@ -159,7 +159,7 @@ describe('Request info', () => {
 
     describe('Does not post a comment because...', () => {
       it('there was a body in pr', async () => {
-        await robot.receive(prFailEvent)
+        await app.receive(prFailEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
@@ -174,7 +174,7 @@ describe('Request info', () => {
 
     describe('Posts a comment because...', () => {
       it('there wasn\'t enough info provided (issue type still working)', async () => {
-        await robot.receive(issueSuccessEvent)
+        await app.receive(issueSuccessEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
@@ -199,7 +199,7 @@ describe('Request info', () => {
 
     describe('Posts a random comment', () => {
       it('selects a random comment and posts it', async () => {
-        await robot.receive(prSuccessEvent)
+        await app.receive(prSuccessEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
@@ -224,7 +224,7 @@ describe('Request info', () => {
 
     describe('Posts a random comment', () => {
       it('selects a random comment and posts it', async () => {
-        await robot.receive(prSuccessEvent)
+        await app.receive(prSuccessEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
@@ -259,7 +259,7 @@ describe('Request info', () => {
       })
 
       it('Posts a comment when PR body is equal to template', async () => {
-        await robot.receive(prTemplateBodyEvent)
+        await app.receive(prTemplateBodyEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
@@ -271,7 +271,7 @@ describe('Request info', () => {
       })
 
       it('Does not post a comment when PR body is different from template', async () => {
-        await robot.receive(prFailEvent)
+        await app.receive(prFailEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
@@ -303,7 +303,7 @@ describe('Request info', () => {
       })
 
       it('Does not post a comment when PR body is equal to template', async () => {
-        await robot.receive(prTemplateBodyEvent)
+        await app.receive(prTemplateBodyEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
@@ -315,7 +315,7 @@ describe('Request info', () => {
       })
 
       it('Does not post a comment when PR body is different from template', async () => {
-        await robot.receive(prFailEvent)
+        await app.receive(prFailEvent)
 
         expect(github.repos.getContent).toHaveBeenCalledWith({
           owner: 'hiimbex',
