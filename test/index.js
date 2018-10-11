@@ -343,13 +343,13 @@ describe('Request info', () => {
     })
 
     it('opens a new issue', async () => {
-      await robot.receive(event)
+      await app.receive(event)
       expect(github.issues.createComment).toHaveBeenCalled()
     })
 
     it('does not open a new issue if the repo name is not right', async () => {
       event.payload.repositories_added = [{ name: 'NOT-introduction-to-github-apps' }]
-      await robot.receive(event)
+      await app.receive(event)
       expect(github.issues.createComment).toNotHaveBeenCalled()
     })
   })
