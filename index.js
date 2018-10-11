@@ -5,6 +5,7 @@ const IssueBodyChecker = require('./lib/IssueBodyChecker')
 const getConfig = require('probot-config')
 
 module.exports = robot => {
+  robot.on('installation_repositories.added', learningLabWelcome)
   robot.on(['pull_request.opened', 'issues.opened'], receive)
   async function receive (context) {
     let title
@@ -64,5 +65,19 @@ module.exports = robot => {
         throw err
       }
     }
+  }
+
+  // Say hi!
+  const NAME = 'introduction-to-github-apps'
+  async function learningLabWelcome (context) {
+    const includes = context.payload.repositories_added.some(r => r.name === NAME)
+    if (!includes) return
+
+    return context.github.issues.createComment({
+      owner: context.payload.installation.account.login,
+      repo: NAME,
+      number: 2,
+      body: 'Well done! You successfully installed the request info app.\n\n_disclaimer_ If you use this app in future repos, you won\'t get a message like this. This is just for Learning Lab!'
+    })
   }
 }
