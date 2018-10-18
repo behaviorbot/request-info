@@ -1,6 +1,7 @@
 const getComment = require('./lib/getComment')
 const defaultConfig = require('./lib/defaultConfig')
 const PullRequestBodyChecker = require('./lib/PullRequestBodyChecker')
+const IssueBodyChecker = require('./lib/IssueBodyChecker')
 const getConfig = require('probot-config')
 
 module.exports = app => {
@@ -36,6 +37,10 @@ module.exports = app => {
 
       if (eventSrc === 'pullRequest') {
         if (!(await PullRequestBodyChecker.isBodyValid(body, config, context))) {
+          badBody = true
+        }
+      } else if (eventSrc === 'issue') {
+        if (!(await IssueBodyChecker.isBodyValid(body, config, context))) {
           badBody = true
         }
       }
