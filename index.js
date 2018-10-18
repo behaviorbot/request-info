@@ -4,9 +4,9 @@ const PullRequestBodyChecker = require('./lib/PullRequestBodyChecker')
 const IssueBodyChecker = require('./lib/IssueBodyChecker')
 const getConfig = require('probot-config')
 
-module.exports = robot => {
-  robot.on('installation_repositories.added', learningLabWelcome)
-  robot.on(['pull_request.opened', 'issues.opened'], receive)
+module.exports = app => {
+  app.on('installation_repositories.added', learningLabWelcome)
+  app.on(['pull_request.opened', 'issues.opened'], receive)
   async function receive (context) {
     let title
     let body
