@@ -36,11 +36,11 @@ module.exports = app => {
       }
 
       if (eventSrc === 'pullRequest') {
-        if (config.checkPullRequestTemplate && !(await PullRequestBodyChecker.isBodyValid(body, config, context))) {
+        if (config.checkPullRequestTemplate && !(await PullRequestBodyChecker.isBodyValid(body, context))) {
           badBody = true
         }
       } else if (eventSrc === 'issue') {
-        if (config.checkIssueTemplate && !(await IssueBodyChecker.isBodyValid(body, config, context))) {
+        if (config.checkIssueTemplate && !(await IssueBodyChecker.isBodyValid(body, context))) {
           badBody = true
         }
       }
