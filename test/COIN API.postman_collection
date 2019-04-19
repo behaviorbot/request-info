@@ -1,0 +1,55 @@
+{
+	"info": {
+		"_postman_id": "ce6b34c9-835a-4f09-beae-938bcfe794a4",
+		"name": "COIN API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "COIN SEARCH PROD 1.0",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-IBM-Client-Id",
+						"value": "f393af68-cb2d-4ffd-9122-c6e1455404ab"
+					},
+					{
+						"key": "X-IBM-Client-Secret",
+						"value": "E4tI1hJ2bO3mJ4jE1iK2jS3rD0uX1bN2sH3jQ1vM3lE2mV7aB4"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json"
+					},
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"programId\": \"CCTR010\",\r\n  \"market\": \"USA\",\r\n  \"option\": \"1\",\r\n  \"vin17\": \"2C3CDXJG6JH235400\",\r\n  \"email\": \"\",\r\n  \"firstName\": \"\",\r\n  \"lastName\": \"\",\r\n  \"zipcode\": \"\",\r\n  \"phone\": \"\",\r\n  \"state\": \"\",\r\n  \"city\": \"\"\r\n}"
+				},
+				"url": {
+					"raw": "https://api.extra.fcagroup.com/fca/extra/vehicle/v1/owners",
+					"protocol": "https",
+					"host": [
+						"api",
+						"extra",
+						"fcagroup",
+						"com"
+					],
+					"path": [
+						"fca",
+						"extra",
+						"vehicle",
+						"v1",
+						"owners"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
