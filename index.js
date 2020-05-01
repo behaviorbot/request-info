@@ -2,7 +2,6 @@ const getComment = require('./lib/getComment')
 const defaultConfig = require('./lib/defaultConfig')
 const PullRequestBodyChecker = require('./lib/PullRequestBodyChecker')
 const IssueBodyChecker = require('./lib/IssueBodyChecker')
-const getConfig = require('probot-config')
 
 module.exports = app => {
   app.on('installation_repositories.added', learningLabWelcome)
@@ -23,7 +22,7 @@ module.exports = app => {
     }
 
     try {
-      const config = await getConfig(context, 'config.yml', defaultConfig)
+      const config = await context.config(`config.yml`, defaultConfig)
 
       if (!config.requestInfoOn[eventSrc]) {
         return
