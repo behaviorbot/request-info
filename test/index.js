@@ -20,7 +20,7 @@ describe('Request info', () => {
 
     github = {
       repos: {
-        getContent: expect.createSpy().andReturn(Promise.resolve({
+        getContents: expect.createSpy().andReturn(Promise.resolve({
           data: {
             content: Buffer.from(`requestInfoLabelToAdd: needs-more-info\nrequestInfoDefaultTitles:\n  - readme.md\nrequestInfoReplyComment: >\n  Reply comment`).toString('base64')
           }
@@ -39,7 +39,7 @@ describe('Request info', () => {
       it('there wasn\'t enough info provided in an issue', async () => {
         await app.receive(issueSuccessEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -54,7 +54,7 @@ describe('Request info', () => {
       it('there wasn\'t enough info provided in a pull request', async () => {
         await app.receive(prSuccessEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -69,7 +69,7 @@ describe('Request info', () => {
       it('there was a body in issue', async () => {
         await app.receive(issueFailEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -83,7 +83,7 @@ describe('Request info', () => {
 
   describe('Request info disabled for issues', () => {
     beforeEach(() => {
-      github.repos.getContent.andReturn(Promise.resolve({
+      github.repos.getContents.andReturn(Promise.resolve({
         data: {
           content: Buffer.from(`requestInfoLabelToAdd: needs-more-info\nrequestInfoDefaultTitles:\n  - readme.md\nrequestInfoReplyComment: >\n  Reply comment\nrequestInfoOn:\n issue: false\n pullRequest: true\n`).toString('base64')
         }
@@ -94,7 +94,7 @@ describe('Request info', () => {
       it("'issue' type is disabled even if there wasn't enough info provided", async () => {
         await app.receive(issueSuccessEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -109,7 +109,7 @@ describe('Request info', () => {
       it('there was a body in issue', async () => {
         await app.receive(issueFailEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -124,7 +124,7 @@ describe('Request info', () => {
       it('there wasn\'t enough info provided in a pull request', async () => {
         await app.receive(prSuccessEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -138,7 +138,7 @@ describe('Request info', () => {
 
   describe('Request info disabled for pull requests', () => {
     beforeEach(() => {
-      github.repos.getContent.andReturn(Promise.resolve({
+      github.repos.getContents.andReturn(Promise.resolve({
         data: {
           content: Buffer.from(`requestInfoLabelToAdd: needs-more-info\nrequestInfoDefaultTitles:\n  - readme.md\nrequestInfoReplyComment: >\n  Reply comment\nrequestInfoOn:\n issue: true\n pullRequest: false\n`).toString('base64')
         }
@@ -149,7 +149,7 @@ describe('Request info', () => {
       it("'pullRequest' type is disabled even if there wasn't enough info provided", async () => {
         await app.receive(prSuccessEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -164,7 +164,7 @@ describe('Request info', () => {
       it('there was a body in pr', async () => {
         await app.receive(prFailEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -179,7 +179,7 @@ describe('Request info', () => {
       it('there wasn\'t enough info provided (issue type still working)', async () => {
         await app.receive(issueSuccessEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -193,7 +193,7 @@ describe('Request info', () => {
 
   describe('Request info for random comment', () => {
     beforeEach(() => {
-      github.repos.getContent.andReturn(Promise.resolve({
+      github.repos.getContents.andReturn(Promise.resolve({
         data: {
           content: Buffer.from(`requestInfoReplyComment:\n  - Reply comment\n  - Other reply comment`).toString('base64')
         }
@@ -204,7 +204,7 @@ describe('Request info', () => {
       it('selects a random comment and posts it', async () => {
         await app.receive(prSuccessEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -218,7 +218,7 @@ describe('Request info', () => {
 
   describe('Request info for excluded user', () => {
     beforeEach(() => {
-      github.repos.getContent.andReturn(Promise.resolve({
+      github.repos.getContents.andReturn(Promise.resolve({
         data: {
           content: Buffer.from(`requestInfoUserstoExclude:\n  - hiimbex\n  - bexo`).toString('base64')
         }
@@ -229,7 +229,7 @@ describe('Request info', () => {
       it('selects a random comment and posts it', async () => {
         await app.receive(prSuccessEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -244,7 +244,7 @@ describe('Request info', () => {
   describe('Request info based on Pull Request template', () => {
     describe('If the setting is set to true', () => {
       beforeEach(() => {
-        github.repos.getContent.andCall(({path}) => {
+        github.repos.getContents.andCall(({path}) => {
           if (path === '.github/PULL_REQUEST_TEMPLATE.md') {
             return Promise.resolve({
               data: {
@@ -264,7 +264,7 @@ describe('Request info', () => {
       it('Posts a comment when PR body is equal to template', async () => {
         await app.receive(prTemplateBodyEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -276,7 +276,7 @@ describe('Request info', () => {
       it('Does not post a comment when PR body is different from template', async () => {
         await app.receive(prFailEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -288,7 +288,7 @@ describe('Request info', () => {
 
     describe('If the setting is set to false', () => {
       beforeEach(() => {
-        github.repos.getContent.andCall(({path}) => {
+        github.repos.getContents.andCall(({path}) => {
           if (path === '.github/PULL_REQUEST_TEMPLATE.md') {
             return Promise.resolve({
               data: {
@@ -308,7 +308,7 @@ describe('Request info', () => {
       it('Does not post a comment when PR body is equal to template', async () => {
         await app.receive(prTemplateBodyEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -320,7 +320,7 @@ describe('Request info', () => {
       it('Does not post a comment when PR body is different from template', async () => {
         await app.receive(prFailEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -334,7 +334,7 @@ describe('Request info', () => {
   describe('Request info based on issue template', () => {
     describe('If the setting is set to false', () => {
       beforeEach(() => {
-        github.repos.getContent.andCall(({path}) => {
+        github.repos.getContents.andCall(({path}) => {
           return Promise.resolve({
             data: {
               content: Buffer.from(`checkIssueTemplate: false`).toString('base64')
@@ -346,7 +346,7 @@ describe('Request info', () => {
       it('posts a message when issue body is empty', async () => {
         await app.receive(issueSuccessEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -358,7 +358,7 @@ describe('Request info', () => {
       it('does not post a message when PR body has text', async () => {
         await app.receive(issueFailEvent)
 
-        expect(github.repos.getContent).toHaveBeenCalledWith({
+        expect(github.repos.getContents).toHaveBeenCalledWith({
           owner: 'hiimbex',
           repo: 'testing-things',
           path: '.github/config.yml'
@@ -371,7 +371,7 @@ describe('Request info', () => {
     describe('If the setting is set to true', () => {
       describe('And the user has no issue template defined', () => {
         beforeEach(() => {
-          github.repos.getContent.andCall(({path}) => {
+          github.repos.getContents.andCall(({path}) => {
             if (path === '.github/ISSUE_TEMPLATE.md') {
               return Promise.reject(new Error('404'))
             }
@@ -387,7 +387,7 @@ describe('Request info', () => {
         it('posts a message when issue body is empty', async () => {
           await app.receive(issueSuccessEvent)
 
-          expect(github.repos.getContent).toHaveBeenCalledWith({
+          expect(github.repos.getContents).toHaveBeenCalledWith({
             owner: 'hiimbex',
             repo: 'testing-things',
             path: '.github/config.yml'
@@ -399,7 +399,7 @@ describe('Request info', () => {
         it('does not post a message when PR body has text', async () => {
           await app.receive(issueFailEvent)
 
-          expect(github.repos.getContent).toHaveBeenCalledWith({
+          expect(github.repos.getContents).toHaveBeenCalledWith({
             owner: 'hiimbex',
             repo: 'testing-things',
             path: '.github/config.yml'
@@ -411,7 +411,7 @@ describe('Request info', () => {
 
       describe('And the user has one template defined', () => {
         beforeEach(() => {
-          github.repos.getContent.andCall(({path}) => {
+          github.repos.getContents.andCall(({path}) => {
             if (path === '.github/ISSUE_TEMPLATE.md') {
               return Promise.resolve({
                 data: {
@@ -431,7 +431,7 @@ describe('Request info', () => {
         it('posts a message when issue body is empty', async () => {
           await app.receive(issueSuccessEvent)
 
-          expect(github.repos.getContent).toHaveBeenCalledWith({
+          expect(github.repos.getContents).toHaveBeenCalledWith({
             owner: 'hiimbex',
             repo: 'testing-things',
             path: '.github/config.yml'
@@ -443,7 +443,7 @@ describe('Request info', () => {
         it('posts a message when issue body matches template', async () => {
           await app.receive(issueTemplateBodyEvent)
 
-          expect(github.repos.getContent).toHaveBeenCalledWith({
+          expect(github.repos.getContents).toHaveBeenCalledWith({
             owner: 'hiimbex',
             repo: 'testing-things',
             path: '.github/config.yml'
@@ -455,7 +455,7 @@ describe('Request info', () => {
         it('does not post a message when issue body is different to template', async () => {
           await app.receive(issueFailEvent)
 
-          expect(github.repos.getContent).toHaveBeenCalledWith({
+          expect(github.repos.getContents).toHaveBeenCalledWith({
             owner: 'hiimbex',
             repo: 'testing-things',
             path: '.github/config.yml'
@@ -467,7 +467,7 @@ describe('Request info', () => {
 
       describe('And the user has multiple templates defined', () => {
         beforeEach(() => {
-          github.repos.getContent.andCall(({path}) => {
+          github.repos.getContents.andCall(({path}) => {
             if (path === '.github/ISSUE_TEMPLATE.md') {
               return Promise.reject(new Error('404'))
             }
@@ -514,7 +514,7 @@ describe('Request info', () => {
         it('posts a message when issue body is empty', async () => {
           await app.receive(issueSuccessEvent)
 
-          expect(github.repos.getContent).toHaveBeenCalledWith({
+          expect(github.repos.getContents).toHaveBeenCalledWith({
             owner: 'hiimbex',
             repo: 'testing-things',
             path: '.github/config.yml'
@@ -526,7 +526,7 @@ describe('Request info', () => {
         it('posts a message when issue body matches first template', async () => {
           await app.receive(issueFirstTemplateBodyEvent)
 
-          expect(github.repos.getContent).toHaveBeenCalledWith({
+          expect(github.repos.getContents).toHaveBeenCalledWith({
             owner: 'hiimbex',
             repo: 'testing-things',
             path: '.github/config.yml'
@@ -538,7 +538,7 @@ describe('Request info', () => {
         it('posts a message when issue body matches second template', async () => {
           await app.receive(issueSecondTemplateBodyEvent)
 
-          expect(github.repos.getContent).toHaveBeenCalledWith({
+          expect(github.repos.getContents).toHaveBeenCalledWith({
             owner: 'hiimbex',
             repo: 'testing-things',
             path: '.github/config.yml'
@@ -550,7 +550,7 @@ describe('Request info', () => {
         it('does not post a message when issue body is different to all templates', async () => {
           await app.receive(issueFailEvent)
 
-          expect(github.repos.getContent).toHaveBeenCalledWith({
+          expect(github.repos.getContents).toHaveBeenCalledWith({
             owner: 'hiimbex',
             repo: 'testing-things',
             path: '.github/config.yml'
