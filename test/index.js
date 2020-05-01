@@ -566,7 +566,7 @@ describe('Request info', () => {
 
       beforeEach(() => {
         event = {
-          event: 'installation_repositories',
+          name: 'installation_repositories',
           payload: {
             action: 'added',
             installation: { account: { login: 'BEXO' } },
