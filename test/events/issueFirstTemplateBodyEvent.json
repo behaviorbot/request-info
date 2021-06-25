@@ -1,0 +1,22 @@
+{
+  "event": "issues",
+  "payload": {
+    "action": "opened",
+    "issue": {
+      "body": "This is the first issue template, please update me",
+      "title": "ur thing is broken fix it!!",
+      "user": {
+        "login": "hiimbex"
+      }
+    },
+    "repository": {
+      "name": "testing-things",
+      "owner": {
+        "login": "hiimbex"
+      }
+    },
+    "installation": {
+      "id": 35471
+    }
+  }
+}
