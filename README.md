@@ -1,6 +1,6 @@
 # request-info
 
-> a GitHub App built with [probot](https://github.com/probot/probot) that requests more info from newly opened Pull Requests and Issues that contain either default titles or whose description is left blank. It does so by taking data from a file located in a `.github/request-info.md` and replying with the contents of that file.
+> a GitHub App built with [probot](https://github.com/probot/probot) that requests more info from newly opened Pull Requests and Issues that contain either default titles or whose description is left blank. It does so by taking data from a `.github/config.yml`.
 
 <img width="1041" alt="screen shot 2017-07-07 at 3 32 01 pm" src="https://user-images.githubusercontent.com/13410355/28132821-d37bf2a8-66f2-11e7-9e7b-5930ba65d67a.png">
 
@@ -16,18 +16,50 @@
 ```yml
 # Configuration for request-info - https://github.com/behaviorbot/request-info
 
-# *Required* default titles to check against for lack of descriptiveness
+# *OPTIONAL* Comment to reply with
+# Can be either a string :
+requestInfoReplyComment: >
+  We would appreciate it if you could provide us with more info about this issue/pr!
+
+# Or an array:
+# requestInfoReplyComment:
+#  - Ah no! young blade! That was a trifle short!
+#  - Tell me more !
+#  - I am sure you can be more effusive
+
+
+# *OPTIONAL* default titles to check against for lack of descriptiveness
 # MUST BE ALL LOWERCASE
 requestInfoDefaultTitles:
   - update readme.md
   - updates
 
-# *Required* Comment to reply with
-requestInfoReplyComment: >
-  We would appreciate it if you could provide us with more info about this issue/pr!
-
 # *OPTIONAL* Label to be added to Issues and Pull Requests with insufficient information given
-requestInfolabelToAdd: needs-more-info
+requestInfoLabelToAdd: needs-more-info
+
+# *OPTIONAL* Require Issues to contain more information than what is provided in the issue templates
+# Will fail if the issue's body is equal to a provided template
+checkIssueTemplate: true
+
+# *OPTIONAL* Require Pull Requests to contain more information than what is provided in the PR template
+# Will fail if the pull request's body is equal to the provided template
+checkPullRequestTemplate: true
+
+# *OPTIONAL* Only warn about insufficient information on these events type
+# Keys must be lowercase. Valid values are 'issue' and 'pullRequest'
+requestInfoOn:
+  pullRequest: true
+  issue: true
+
+# *OPTIONAL* Add a list of people whose Issues/PRs will not be commented on
+# keys must be GitHub usernames
+requestInfoUserstoExclude:
+  - hiimbex
+  - bexo
+```
+3. If you prefer not to add a `.github/config.yml` file, you can simply install the bot and it would comment on issues and pull requests that have empty bodies, with the comment:
+```
+The maintainers of this repository would appreciate it if you could provide more information.
 ```
 
 ## Setup
